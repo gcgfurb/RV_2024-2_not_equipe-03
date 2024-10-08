@@ -22,6 +22,7 @@ desktop.ini
 mono_crash.*
 
 # Build results
+
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -36,6 +37,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Ll]ibrary/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
