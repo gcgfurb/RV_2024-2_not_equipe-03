@@ -13,47 +13,92 @@ public class PlayerMovimentForCam : MonoBehaviour
 
     public Vector3 cellSize = new Vector3(1.0f, 1.0f, 1.0f);
     public LayerMask groundLayer;
+    public ChaoPrefabScript _pisoAtual;
 
     void Start()
     {
         inicial = GameObject.FindGameObjectWithTag("Inicial");
-
+        _pisoAtual = inicial.GetComponent<ChaoPrefabScript>();
         if (inicial != null)
         {
             Vector3 alignedStartPos = AlignToGrid(inicial.transform.position);
             transform.position = alignedStartPos;
             targetPosition = alignedStartPos;
+            _pisoAtual.SetGrass(true);
         }
     }
 
     void Update()
     {
-        if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
-        {
-            Vector3 direction = Vector3.zero;
-
-            if (Input.GetKeyDown(KeyCode.W))
-                direction = Vector3.forward;
-            else if (Input.GetKeyDown(KeyCode.S))
-                direction = Vector3.back;
-            else if (Input.GetKeyDown(KeyCode.A))
-                direction = Vector3.left;
-            else if (Input.GetKeyDown(KeyCode.D))
-                direction = Vector3.right;
-
-            if (direction != Vector3.zero)
-            {
-                Vector3 nextPosition = AlignToGrid(targetPosition + direction * gridSize);
-
-                if (LogCurrentBlock(nextPosition))
-                {
-                    targetPosition = nextPosition;
-                }
-            }
-        }
-
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
     }
+
+    public void Andar(List<buttonValue> vls)
+    {
+        StartCoroutine(AndarCotoutine(vls));
+    }
+
+    IEnumerator AndarCotoutine(List<buttonValue> vls)
+    {
+        foreach (buttonValue v in vls)
+        {
+            yield return new WaitForSeconds(.5f);
+            setMoviments(v);
+        }
+        FindAnyObjectByType<PainelScript>().restartAll();
+    }
+
+    private void setMoviments(buttonValue v)
+    {
+        switch (v)
+        {
+            case buttonValue.cima:
+                MoveUp();
+                break;
+            case buttonValue.baixo:
+                MoveDown();
+                break;
+            case buttonValue.esquerda:
+                MoveLeft();
+                break;
+            case buttonValue.direita:
+                MoveRight();
+                break;
+        }
+    }
+    public void MoveUp()
+    {
+        MoveInDirection(Vector3.forward);
+    }
+
+    public void MoveDown()
+    {
+        MoveInDirection(Vector3.back);
+    }
+
+    public void MoveLeft()
+    {
+        MoveInDirection(Vector3.left);
+    }
+
+    public void MoveRight()
+    {
+        MoveInDirection(Vector3.right);
+    }
+
+    private void MoveInDirection(Vector3 direction)
+    {
+        if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
+        {
+            Vector3 nextPosition = AlignToGrid(targetPosition + direction * gridSize);
+
+            if (LogCurrentBlock(nextPosition))
+            {
+                targetPosition = nextPosition;
+            }
+        }
+    }
+
 
     Vector3 AlignToGrid(Vector3 position)
     {
