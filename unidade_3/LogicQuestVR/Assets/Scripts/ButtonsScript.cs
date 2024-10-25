@@ -17,6 +17,5 @@ public class ButtonsScript : MonoBehaviour
 
     private void clicked()
     {
-        _painel.sendClick(value);
     }
 }

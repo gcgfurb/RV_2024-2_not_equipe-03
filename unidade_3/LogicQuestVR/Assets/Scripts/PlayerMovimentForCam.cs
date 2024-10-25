@@ -24,7 +24,6 @@ public class PlayerMovimentForCam : MonoBehaviour
             Vector3 alignedStartPos = AlignToGrid(inicial.transform.position);
             transform.position = alignedStartPos;
             targetPosition = alignedStartPos;
-            _pisoAtual.SetGrass(true);
         }
     }
 
@@ -45,7 +44,6 @@ public class PlayerMovimentForCam : MonoBehaviour
             yield return new WaitForSeconds(.5f);
             setMoviments(v);
         }
-        FindAnyObjectByType<PainelScript>().restartAll();
     }
 
     private void setMoviments(buttonValue v)

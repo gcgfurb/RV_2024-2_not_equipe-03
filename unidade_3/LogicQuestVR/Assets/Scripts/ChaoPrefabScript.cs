@@ -5,28 +5,45 @@ using UnityEngine;
 
 public class ChaoPrefabScript : MonoBehaviour
 {
-    public Material grass;
-    public Material grassPressed;
+    public List<Sprite> setas = new List<Sprite>();
 
-    public MeshRenderer _renderer;
+    public SpriteRenderer seta;
+    public Direcao dir;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-        _renderer = GetComponent<MeshRenderer>();
+        dir = Direcao.None;
+        OnStateChange();
     }
 
-    public void SetGrass(bool press)
+    public void setDirection(Direcao d)
     {
-        Debug.Log("Entrei: " + press);
-        if (press) { changeGrass(); }
-        else { _renderer.materials[0] = grass; }
+        dir = d;
+        OnStateChange();
     }
 
-    private void changeGrass()
+    void OnStateChange()
     {
-        Material[] mat = _renderer.materials;
-        mat[0] = grassPressed;
-
+        switch (dir)
+        {
+            case Direcao.None:
+                seta.gameObject.SetActive(false);
+                break;
+            case Direcao.norte:
+                seta.sprite = setas[0];
+                break;
+            case Direcao.sul:
+                seta.sprite = setas[1];
+                break;
+            case Direcao.leste:
+                seta.sprite = setas[3];
+                break;
+            case Direcao.oeste:
+                seta.sprite = setas[4];
+                break;
+        }
+        if (dir != Direcao.None) { seta.gameObject.SetActive(true); }
     }
+
 }
